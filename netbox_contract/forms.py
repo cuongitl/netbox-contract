@@ -480,7 +480,7 @@ class InvoiceBulkEditForm(NetBoxModelBulkEditForm):
         label=_('Currency'),
     )
     amount = forms.DecimalField(
-        max_digits=10,
+        max_digits=30,
         decimal_places=2,
         required=False,
         label=_('Amount'),
