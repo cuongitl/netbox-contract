@@ -335,6 +335,15 @@ class InvoiceForm(NetBoxModelForm):
             # set the periode start and end date to null
             self.cleaned_data['period_start'] = None
             self.cleaned_data['period_end'] = None
+        # Validation: invoice currency matches contract currency
+        if self.cleaned_data['currency']:
+            invoice_currency = self.cleaned_data.get('currency')
+            if invoice_currency:
+                for contract in self.cleaned_data.get('contracts', []):
+                    if contract.currency != invoice_currency:
+                        raise ValidationError(
+                            _(f"Invoice currency ({invoice_currency}) must match contract currency ({contract.currency}) for contract '{contract.name}'")
+                        )
 
     def save(self, *args, **kwargs):
         is_new = not bool(self.instance.pk)
@@ -619,7 +628,14 @@ class InvoiceLineForm(NetBoxModelForm):
         for dimension in mandatory_dimensions:
             if dimension not in dimensions_names:
                 raise ValidationError(f'dimension {dimension} missing')
-
+        # Validation: Currency consistency check - InvoiceLine currency matches Invoice currency.
+        if self.cleaned_data.get('invoice') and self.cleaned_data['currency']:
+            invoice = self.cleaned_data.get('invoice')
+            currency = self.cleaned_data.get('currency')
+            if invoice and currency and invoice.currency != currency:
+                raise ValidationError(
+                    f"InvoiceLine currency ({currency}) must match parent invoice currency ({invoice.currency})."
+                )
     class Meta:
         model = InvoiceLine
         fields = [
