@@ -241,7 +241,7 @@ class Contract(ContactsMixin, NetBoxModel):
     )
     yrc = models.DecimalField(
         verbose_name=_('yearly recuring cost'),
-        max_digits=10,
+        max_digits=30,
         decimal_places=2,
         blank=True,
         null=True,
@@ -249,13 +249,13 @@ class Contract(ContactsMixin, NetBoxModel):
     )
     mrc = models.DecimalField(
         verbose_name=_('monthly recuring cost'),
-        max_digits=10,
+        max_digits=30,
         decimal_places=2,
         blank=True,
         null=True,
         help_text=_('Use either this field of the yearly recuring cost field'),
     )
-    nrc = models.DecimalField(verbose_name=_('none recuring cost'), default=0, max_digits=10, decimal_places=2)
+    nrc = models.DecimalField(verbose_name=_('none recuring cost'), default=0, max_digits=30, decimal_places=2)
     invoice_frequency = models.IntegerField(
         help_text=_('The frequency of invoices in month'),
         default=1,
@@ -317,7 +317,7 @@ class Invoice(NetBoxModel):
         default=CURRENCY_DEFAULT,
         verbose_name=_('currency'),
     )
-    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('amount'))
+    amount = models.DecimalField(max_digits=30, decimal_places=2, verbose_name=_('amount'))
     documents = models.URLField(
         blank=True,
         verbose_name=_('documents'),
@@ -357,7 +357,7 @@ class InvoiceLine(NetBoxModel):
         default=CURRENCY_DEFAULT,
         verbose_name=_('currency'),
     )
-    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('amount'))
+    amount = models.DecimalField(max_digits=30, decimal_places=2, verbose_name=_('amount'))
     accounting_dimensions = models.ManyToManyField(
         AccountingDimension, blank=True, verbose_name=_('accounting dimensions')
     )
